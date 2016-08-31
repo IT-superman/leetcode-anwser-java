@@ -1,4 +1,4 @@
-package com.swc.adv.practice.rjlovesys;
+package com.samsung.sotong.rjlovesys;
 /*
 You should use the statndard input/output
 

@@ -1,4 +1,4 @@
-package com.swc.adv.practice.rjlovesys;
+package com.samsung.sotong.rjlovesys;
 
 import java.util.Date;
 
