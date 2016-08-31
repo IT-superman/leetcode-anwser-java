@@ -44,8 +44,31 @@ class Algorithm {
 		//sc = new Scanner(new FileInputStream("input.txt"));
 
 		int T = sc.nextInt();
+		if (T>30 || T<=0) {
+			return;
+		}
+		int []resultVal = new int[T];
 		for(int tc = 0; tc < T; tc++) {
-
+			
+			int pocketsNum = sc.nextInt();
+			if (pocketsNum<2 || pocketsNum>32000) {
+				return;
+			}
+			int sumMables = 0;
+			int []mablesVal = new int[pocketsNum];
+			for (int i = 0; i < pocketsNum; i++) {
+				int mablesNum = sc.nextInt();
+				if (mablesNum>32000 || mablesNum<0) {
+					return;
+				}
+				mablesVal[i] = mablesNum;
+				sumMables+=mablesNum;
+			}
+			
+			if (sumMables%pocketsNum==0) {
+				
+			}
+			
 			/**********************************
 			*  Implement your algorithm here. *
 			***********************************/
