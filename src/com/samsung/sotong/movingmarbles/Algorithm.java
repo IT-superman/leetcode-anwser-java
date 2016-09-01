@@ -35,19 +35,21 @@ Output
 //in order to receive a score properly.
 //Do not use file input and output. Please be very careful. 
 
-import java.util.Scanner;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 class Algorithm {
 	public static void main(String args[]) throws Exception	{
 		Scanner sc = new Scanner(System.in);
-		//sc = new Scanner(new FileInputStream("input.txt"));
+		//Scanner sc = new Scanner(new FileInputStream("src/com/samsung/sotong/movingmarbles/sample_input.txt"));
 
 		int T = sc.nextInt();
 		if (T>30 || T<=0) {
 			return;
 		}
-		int []resultVal = new int[T];
+		List<Integer> resultVal = new ArrayList<Integer>();
 		for(int tc = 0; tc < T; tc++) {
 			
 			int pocketsNum = sc.nextInt();
@@ -55,18 +57,28 @@ class Algorithm {
 				return;
 			}
 			int sumMables = 0;
-			int []mablesVal = new int[pocketsNum];
+			List<Integer> mablesVal = new ArrayList<Integer>();
 			for (int i = 0; i < pocketsNum; i++) {
 				int mablesNum = sc.nextInt();
 				if (mablesNum>32000 || mablesNum<0) {
 					return;
 				}
-				mablesVal[i] = mablesNum;
+				mablesVal.add(mablesNum);
 				sumMables+=mablesNum;
 			}
-			
-			if (sumMables%pocketsNum==0) {
-				
+			int restNum = sumMables%pocketsNum;
+			if (restNum==0) {
+				int equalNum = sumMables/pocketsNum;
+				int sumMovingTimes = 0;
+				for(int i=0;i<pocketsNum;i++){
+					int mables = mablesVal.get(i);
+					if(mables>equalNum){
+						sumMovingTimes+=(mables-equalNum);
+					}
+				}
+				resultVal.add(sumMovingTimes);
+			}else{
+				resultVal.add(-1);
 			}
 			
 			/**********************************
@@ -76,6 +88,12 @@ class Algorithm {
 			// Print the answer to standard output(screen).
 
 		}
+		
+		for(int tc = 0; tc < T; tc++) {
+			System.out.println(resultVal.get(tc));
+		
+		}
+		
 	}
 }
 
