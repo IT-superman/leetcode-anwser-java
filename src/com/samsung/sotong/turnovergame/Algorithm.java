@@ -1,51 +1,12 @@
 package com.samsung.sotong.turnovergame;
-/**
- * Turn Over Game As in , there is a 4×4 sized table. In a grid of the table, there are white or black stones. When you choose a position of stone randomly, four stones adjacent to the up, down, left and right sides of the stone will turn to the opposite color like turning a white stone to a black & a black stone to a white. Let’s suppose this process as a calculation.﻿﻿
-
-
-
-Using such a calculation, you want to change all the stones on the table into all whites or all blacks. Find out the minimum operation count at this time. 
-
-Time limit: 1 second (java: 2 seconds)
-
-[Input]
-Several test cases can be included in the inputs. T, the number of cases is given in the first row of the inputs. After that, the test cases as many as T (T ≤ 30) are given in a row. 
-Table info is given without blank over four rows per each test case. Colors are indicated like white for ‘w’ and black for ‘b’.
-
-[Output]
-Output the minimum operation count to change all colors as white or black on the first row per each test case. If not possible, output ‘impossible’.
-
-[I/O Example]
-Input
-2
-bwwb
-bbwb
-bwwb
-bwww
-bwbw
-wwww
-bbwb
-bwwb
-
-Output
-4
-impossible
- * @author samsung
- *
- */
-import java.util.*;
-
-import com.sun.jmx.remote.internal.ArrayQueue;
-
 import java.io.*;
-import java.math.*;
 
 class Algorithm {
 	public static void main(String args[]) throws Exception	{
 		//Scanner sc = new Scanner(System.in);
 		//sc = new Scanner(new FileInputStream("input.txt"));
-//		StreamTokenizer sc = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
-		StreamTokenizer sc = new StreamTokenizer(new BufferedReader(new InputStreamReader(new FileInputStream("src/com/samsung/sotong/turnovergame/sample_input.txt"))));
+		StreamTokenizer sc = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
+//		StreamTokenizer sc = new StreamTokenizer(new BufferedReader(new InputStreamReader(new FileInputStream("src/com/samsung/sotong/turnovergame/sample_input.txt"))));
 		sc.nextToken();
 		int T = (int)sc.nval;
 		if (T>30 || T<0) {
@@ -56,7 +17,7 @@ class Algorithm {
 		
 		int []availToTurnTimesMap = new int[65536];
 		for (int k = 0; k < availToTurnTimesMap.length; k++) {
-			availToTurnTimesMap[k] = 32;
+			availToTurnTimesMap[k] = -1;
 		}
 		int fullWhite = 0;
 		int fullBlack = 65535;
@@ -77,46 +38,51 @@ class Algorithm {
 		turnPosToVal[13] = getIntegerValByStrBinary("0000000001001110");
 		turnPosToVal[14] = getIntegerValByStrBinary("0000000000100111");
 		turnPosToVal[15] = getIntegerValByStrBinary("0000000000010011");
-		Deque<Integer> dequeWhite = new ArrayDeque<Integer>();
-		Deque<Integer> dequeBlack = new ArrayDeque<Integer>();
-		List<Integer> list = new LinkedList<Integer>();
-		int turnTimes = 0;
+		int []statusTurnTimes = new int[16];
+		for (int i = 0; i < statusTurnTimes.length; i++) {
+			statusTurnTimes[i] = 0;
+		}
+		int []statusVal = new int[16];
+		for (int i = 0; i < statusVal.length; i++) {
+			statusVal[i]=fullWhite;
+		}
 		availToTurnTimesMap[0]=0;
 		availToTurnTimesMap[65535]=0;
-		dequeWhite.push(0);
-		dequeBlack.push(65535);
-		int everyLevelCount = 0;
-		while (turnTimes<=4) {
-			int frontVal = dequeWhite.pop();
-			if (everyLevelCount>=Math.pow(16, (turnTimes+1))) {
-				++turnTimes;
-				everyLevelCount=0;
-			}
-			for(int i=0;i<16;++i){
-				int xorVal = frontVal^turnPosToVal[i];
-				if (availToTurnTimesMap[xorVal]>(turnTimes+1)) {
-					availToTurnTimesMap[xorVal] = turnTimes+1;
+		for (int i = 0; i < 16; i++) {
+			for (int j = 0; j <= i; j++) {
+				int tempXORVal = statusVal[j]^turnPosToVal[i];
+				statusVal[j]=tempXORVal;
+				++statusTurnTimes[j];
+				if (availToTurnTimesMap[tempXORVal]==-1 || availToTurnTimesMap[tempXORVal]>statusTurnTimes[j]) {
+					availToTurnTimesMap[tempXORVal] = statusTurnTimes[j];
 				}
-				dequeWhite.push(xorVal);
-				++everyLevelCount;
 			}
-			
-			int frontBlackVal = dequeBlack.pop();
-			for(int i=0;i<16;++i){
-				int xorVal = frontBlackVal^turnPosToVal[i];
-				if (availToTurnTimesMap[xorVal]>(turnTimes+1)) {
-					availToTurnTimesMap[xorVal] = turnTimes+1;
+		}
+		
+		for (int i = 0; i < statusTurnTimes.length; i++) {
+			statusTurnTimes[i] = 0;
+		}
+		for (int i = 0; i < statusVal.length; i++) {
+			statusVal[i]=fullBlack;
+		}
+		for (int i = 0; i < 16; i++) {
+			for (int j = 0; j <= i; j++) {
+				int tempXORVal = statusVal[j]^turnPosToVal[i];
+				statusVal[j]=tempXORVal;
+				++statusTurnTimes[j];
+				if (availToTurnTimesMap[tempXORVal]==-1 || availToTurnTimesMap[tempXORVal]>statusTurnTimes[j]) {
+					availToTurnTimesMap[tempXORVal] = statusTurnTimes[j];
 				}
-				dequeBlack.push(xorVal);
 			}
-			
 		}
-		for (int k = 0; k < availToTurnTimesMap.length; k++) {
-			if (availToTurnTimesMap[k]<32) {
-				System.out.println("==>"+k+"====>"+availToTurnTimesMap[k]);	
-			}
-			
-		}
+		
+		
+//		for (int k = 0; k < availToTurnTimesMap.length; k++) {
+//			if (availToTurnTimesMap[k]!=-1) {
+//				System.out.println("==>"+k+"====>"+availToTurnTimesMap[k]);	
+//			}
+//			
+//		}
 		
 		for(int tc = 0; tc < T; tc++) {
 			
@@ -151,13 +117,14 @@ class Algorithm {
 				currentNum+=bit*Math.pow(2, (15-i));
 			}
 			
-			System.out.println(currentNum);
 			
 			int tempTimes = availToTurnTimesMap[currentNum];
-			System.out.println("====>"+tempTimes);				
-			
+			if (tempTimes==-1) {
+				System.out.println("impossible");
+			}else {
+				System.out.println(tempTimes);	
+			}
 			// Print the answer to standard output(screen).
-
 		}
 	}
 	
@@ -174,3 +141,91 @@ class Algorithm {
 	}
 	
 }
+
+
+
+//////////////////////////////////
+/*
+ * 
+import java.util.Scanner;
+
+public class  Algorithm {
+	public static void main(String[] args) {
+		Scanner sc=new Scanner(System.in);
+		int nt=sc.nextInt();
+		for(int i=0; i< nt; i++){
+			char ch[]=new char[16];
+			for(int j=0; j< 4; j++){
+				char carr[]=sc.next().toCharArray();
+				for(int k=0; k< carr.length; k++){
+					ch[j*4 + k] = carr[k];
+				}
+			}
+			int res = computeGame(ch, 0);
+			if(res != 200){
+				System.out.println(res);
+			}else{
+				System.out.println("impossible");
+			}
+			
+		}
+	}
+
+	private static int computeGame(char[] ch, int pos) {
+		int x = pos / 4;
+		int y= pos % 4;
+        if(isGameCompleted(ch)){
+			return 0;
+		}
+		if(pos >=16){
+			return 200;
+		}
+		
+		
+		int res1 = computeGame(ch, pos+1);
+		change(ch, x, y);
+		int res2 = computeGame(ch, pos+1)+1;
+		change(ch, x, y);
+		if(res1 > res2){
+			res1 = res2;
+		}
+		return res1;
+	}
+
+	private static void change(char[] ch, int x, int y) {
+		changeme(ch, x, y);
+		changeme(ch, x-1, y);
+		changeme(ch, x+1, y);
+		changeme(ch, x, y-1);
+		changeme(ch, x, y+1);
+	}
+
+	private static void changeme(char[] ch, int x, int y) {
+		if(x < 0 || x > 3 || y < 0 || y > 3){
+			return;
+		}
+		if(ch[x*4+y]=='b'){
+			ch[x*4+y]='w';
+		}else if(ch[x*4+y]=='w'){
+			ch[x*4+y]='b';
+		}
+	}
+
+	private static boolean isGameCompleted(char[] ch) {
+		char c = ch[0];
+		boolean flg = true;
+		for(int i=1; i< 16; i++){
+			if(ch[i] != c){
+				flg = false;
+				break;
+			}
+		}
+		return flg;
+	}
+
+}
+
+ */
+
+
+/////////////////////////////////
