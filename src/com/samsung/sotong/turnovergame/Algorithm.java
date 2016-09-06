@@ -1,6 +1,10 @@
 package com.samsung.sotong.turnovergame;
 import java.io.*;
-
+/**
+ * score:65
+ * @author samsung
+ *
+ */
 class Algorithm {
 	public static void main(String args[]) throws Exception	{
 		//Scanner sc = new Scanner(System.in);
@@ -141,91 +145,35 @@ class Algorithm {
 	}
 	
 }
-
-
-
-//////////////////////////////////
 /*
- * 
-import java.util.Scanner;
-
-public class  Algorithm {
-	public static void main(String[] args) {
-		Scanner sc=new Scanner(System.in);
-		int nt=sc.nextInt();
-		for(int i=0; i< nt; i++){
-			char ch[]=new char[16];
-			for(int j=0; j< 4; j++){
-				char carr[]=sc.next().toCharArray();
-				for(int k=0; k< carr.length; k++){
-					ch[j*4 + k] = carr[k];
-				}
-			}
-			int res = computeGame(ch, 0);
-			if(res != 200){
-				System.out.println(res);
-			}else{
-				System.out.println("impossible");
-			}
-			
-		}
-	}
-
-	private static int computeGame(char[] ch, int pos) {
-		int x = pos / 4;
-		int y= pos % 4;
-        if(isGameCompleted(ch)){
-			return 0;
-		}
-		if(pos >=16){
-			return 200;
-		}
-		
-		
-		int res1 = computeGame(ch, pos+1);
-		change(ch, x, y);
-		int res2 = computeGame(ch, pos+1)+1;
-		change(ch, x, y);
-		if(res1 > res2){
-			res1 = res2;
-		}
-		return res1;
-	}
-
-	private static void change(char[] ch, int x, int y) {
-		changeme(ch, x, y);
-		changeme(ch, x-1, y);
-		changeme(ch, x+1, y);
-		changeme(ch, x, y-1);
-		changeme(ch, x, y+1);
-	}
-
-	private static void changeme(char[] ch, int x, int y) {
-		if(x < 0 || x > 3 || y < 0 || y > 3){
-			return;
-		}
-		if(ch[x*4+y]=='b'){
-			ch[x*4+y]='w';
-		}else if(ch[x*4+y]=='w'){
-			ch[x*4+y]='b';
-		}
-	}
-
-	private static boolean isGameCompleted(char[] ch) {
-		char c = ch[0];
-		boolean flg = true;
-		for(int i=1; i< 16; i++){
-			if(ch[i] != c){
-				flg = false;
-				break;
-			}
-		}
-		return flg;
-	}
-
-}
-
- */
+Turn Over Game As in , there is a 4×4 sized table. In a grid of the table, there are white or black stones. When you choose a position of stone randomly, four stones adjacent to the up, down, left and right sides of the stone will turn to the opposite color like turning a white stone to a black & a black stone to a white. Let’s suppose this process as a calculation.﻿﻿
 
 
-/////////////////////////////////
+
+Using such a calculation, you want to change all the stones on the table into all whites or all blacks. Find out the minimum operation count at this time. 
+
+Time limit: 1 second (java: 2 seconds)
+
+[Input]
+Several test cases can be included in the inputs. T, the number of cases is given in the first row of the inputs. After that, the test cases as many as T (T ≤ 30) are given in a row. 
+Table info is given without blank over four rows per each test case. Colors are indicated like white for ‘w’ and black for ‘b’.
+
+[Output]
+Output the minimum operation count to change all colors as white or black on the first row per each test case. If not possible, output ‘impossible’.
+
+[I/O Example]
+Input
+2
+bwwb
+bbwb
+bwwb
+bwww
+bwbw
+wwww
+bbwb
+bwwb
+
+Output
+4
+impossible 
+*/
