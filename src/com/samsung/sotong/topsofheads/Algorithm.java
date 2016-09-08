@@ -1,10 +1,47 @@
 package com.samsung.sotong.topsofheads;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.*;
+/**
+ * score:90 time limit
+ * @author samsung
+ *
+ */
 public class Algorithm {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		// TODO Auto-generated method stub
-
+		Scanner scanner = new Scanner(System.in);
+		//Scanner scanner = new Scanner(new FileInputStream("src/com/samsung/sotong/topsofheads/sample_input.txt"));
+		int T = Integer.valueOf(scanner.next());
+		for (int i = 0; i < T; i++) {
+			int staffNum = scanner.nextInt();
+			int sumTaller = 0;
+			int []heightarr = new int[staffNum];
+			for (int j = 0; j < staffNum; j++) {
+				heightarr[j] = scanner.nextInt();
+			}
+			for (int j = 0; j < staffNum-1; j++) {
+				int curHeight = heightarr[j];
+				int loopIndex = j+1;
+				int nextHeight = heightarr[loopIndex];
+				int curTallerNum = 0;
+				while (curHeight>nextHeight && loopIndex<staffNum) {
+					++curTallerNum;
+					++loopIndex;
+					if (loopIndex<staffNum) {
+						nextHeight = heightarr[loopIndex];
+					}
+					
+				}
+				sumTaller+=curTallerNum;
+			}
+			
+			System.out.println(sumTaller);
+			
+		}
+		
 	}
 
 }
