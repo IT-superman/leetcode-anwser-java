@@ -81,7 +81,7 @@ public class InsertDeleteGetRandom380 {
         int randomRange = (int)(dRandom*Math.pow(10, bitCount));
         int nIndex = randomRange%collecSize;
         Object[] keyArray = collections.keySet().toArray();
-        int indexKey = (int)(keyArray[nIndex]);
+        int indexKey = (Integer)(keyArray[nIndex]);
         return collections.get(indexKey);
     }
 }

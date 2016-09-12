@@ -1,5 +1,6 @@
 package com.samsung.sotong.honeycomb;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -13,6 +14,7 @@ public class Algorithm {
 	public static void main(String[] args) throws Exception{
 		
 		Scanner scanner = new Scanner(System.in);
+		//Scanner scanner = new Scanner(new FileInputStream("src/com/samsung/sotong/honeycomb/sample_input.txt"));
 		int T = Integer.valueOf(scanner.nextLine());
 		while(T-->0){
 			Graph graph = new Graph();
@@ -64,13 +66,11 @@ public class Algorithm {
 				lastLevelNode.clear();
 				lastLevelNode = curLevelNode;
 			}
-			for (int i = 0; i < graph.levelMaxNum.length; i++) {
-				System.out.println(graph.levelMaxNum[i]);
-			}
+			
 			
 			memGraph = graph;
-			
-			
+			caculateMaxNum();
+			System.out.print(maxRouteNum);
 				
 		}
 		
@@ -80,7 +80,55 @@ public class Algorithm {
 	private static void caculateMaxNum(){
 		
 		
+		for(int i=0;i<memGraph.topNodeArr.length;++i){
+			Node TopNode = memGraph.topNodeArr[i];
+			int[] scanedVal = new int[2*memGraph.sizeLenth-1];
+			scanNode(TopNode,scanedVal,0);
+			
+		}
 		
+	}
+	
+	private static void scanNode(Node node,int[] scanedVal,int num){
+		if (node==null) {
+			return;
+		}
+		scanedVal[num] = node.value;
+		++num;
+		if (num==2*memGraph.sizeLenth-1) {
+			//选择与最大值差值最大的节点做改变
+			int maxSec = 0;
+			int maxIndex = 0;
+			for (int i = 0; i < num; i++) {
+				int nodeVal = scanedVal[i];
+				int levelMax = memGraph.levelMaxNum[i];
+				if (levelMax-nodeVal>maxSec) {
+					maxSec = levelMax-nodeVal;
+					maxIndex = i;
+				}
+			}
+			
+			int maxSum = 0;
+			for (int i = 0; i < num; i++) {
+				int nodeVal = scanedVal[i];
+				if (i==maxIndex) {
+					int levelMax = memGraph.levelMaxNum[i];
+					nodeVal = levelMax;
+				}
+				
+				maxSum+=nodeVal;
+				
+			}
+			
+			if (maxSum>maxRouteNum) {
+				maxRouteNum = maxSum;
+			}
+			return;
+		}
+		
+		scanNode(node.left,scanedVal,num);
+		scanNode(node.right,scanedVal,num);
+		return;
 	}
 }
 
@@ -98,7 +146,7 @@ class Node{
 	public Node right = null;
 }
 /*
-shows a honeycomb with length 3 on a side. When it calls a figure-written circle a node, a method to move from the current node to the next is to move down left or down right diagonally. ﻿
+shows a honeycomb with length 3 on a side. When it calls a figure-written circle a node, a method to move from the current node to the next is to move down left or down right diagonally. 锘�
 
 
 
@@ -108,7 +156,7 @@ Find the highest sum of nodes starting from the top node to the bottom node. The
 Time limit: 1 second (java: 2 seconds)
 
 [Input]
-Several test cases can be included in the inputs. T, the number of cases is given in the first row of the inputs. After that, the test cases as many as T (T ≤ 30) are given in a row. 
+Several test cases can be included in the inputs. T, the number of cases is given in the first row of the inputs. After that, the test cases as many as T (T 鈮� 30) are given in a row. 
 A side length of a honeycomb, N is given on the first row per each test case. These figures are over 0 below 99. 
 
 [Output]
