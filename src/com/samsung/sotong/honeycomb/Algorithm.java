@@ -1,9 +1,102 @@
 package com.samsung.sotong.honeycomb;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
+
 public class Algorithm {
 
+	private static int maxRouteNum = 0;
+	private static Graph memGraph = null; 
+	public static void main(String[] args) throws Exception{
+		
+		Scanner scanner = new Scanner(System.in);
+		int T = Integer.valueOf(scanner.nextLine());
+		while(T-->0){
+			Graph graph = new Graph();
+			maxRouteNum = 0;
+			int sideLength = Integer.valueOf(scanner.nextLine());
+			graph.sizeLenth = sideLength;
+			graph.topNodeArr = new Node[sideLength];
+			graph.levelMaxNum = new int[2*sideLength-1];
+			List<Node> lastLevelNode = new ArrayList<Node>();
+			for (int i = 0; i < 2*sideLength-1; i++) {
+				String[] numStrArr = scanner.nextLine().trim().split(" ");
+				List<Node> curLevelNode = new ArrayList<Node>();
+				int levelMaxNum = 0;
+				for (int j = 0; j < numStrArr.length; j++) {
+					int nodeVal = Integer.valueOf(numStrArr[j]);
+					if (i==0) {
+						Node node = new Node();
+						node.value = nodeVal;
+						node.levelIndex = i;
+						graph.topNodeArr[j] = node;
+						curLevelNode.add(node);
+					}else {
+						Node node = new Node();
+						node.value = nodeVal;
+						node.levelIndex = i;
+						
+						if (i<=sideLength-1) {
+							if (j==0) {
+								lastLevelNode.get(j).left=node;
+							}else if(j==numStrArr.length-1){
+								lastLevelNode.get(j-1).right=node;
+							}else {
+								lastLevelNode.get(j-1).right=node;
+								lastLevelNode.get(j).left=node;
+							}
+						}else {
+								lastLevelNode.get(j).right=node;
+								lastLevelNode.get(j+1).left=node;
+						}
+						curLevelNode.add(node);
+					}
+					
+					if (nodeVal>levelMaxNum) {
+						levelMaxNum = nodeVal;
+					}
+					
+				}
+				graph.levelMaxNum[i] = levelMaxNum;
+				lastLevelNode.clear();
+				lastLevelNode = curLevelNode;
+			}
+			for (int i = 0; i < graph.levelMaxNum.length; i++) {
+				System.out.println(graph.levelMaxNum[i]);
+			}
+			
+			memGraph = graph;
+			
+			
+				
+		}
+		
+		
+	}
+	
+	private static void caculateMaxNum(){
+		
+		
+		
+	}
 }
 
+class Graph{
+	public int sizeLenth = 0;
+	public Node[] topNodeArr;
+	public int[] levelMaxNum;
+	
+}
+
+class Node{
+	public int levelIndex = 0;
+	public int value = 0;
+	public Node left = null;
+	public Node right = null;
+}
 /*
 shows a honeycomb with length 3 on a side. When it calls a figure-written circle a node, a method to move from the current node to the next is to move down left or down right diagonally. ﻿
 
