@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
-
+/**
+ * wrong :Time limit Exceeded
+ * @author samsung
+ *
+ */
 public class Algorithm {
 
 	private static int maxRouteNum = 0;
@@ -69,8 +72,8 @@ public class Algorithm {
 			
 			
 			memGraph = graph;
-			caculateMaxNum();
-			System.out.print(maxRouteNum);
+			//caculateMaxNum();
+			System.out.println(maxRouteNum);
 				
 		}
 		
